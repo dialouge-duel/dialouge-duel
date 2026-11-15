@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = Number(process.env.PORT) || 10000;
 const DATA = process.env.DATA_DIR || path.join(__dirname, "data");
 const UP = path.join(DATA, "uploads");
 const DBF = path.join(DATA, "db.json");
@@ -403,8 +403,8 @@ const server = http.createServer(async (req, res) => {
     if (!e.code) console.error(e);
   }
 });
-if (require.main === module) server.listen(PORT, () => {
-  console.log("Dialogue Duel running on http://localhost:" + PORT + (process.env.ANTHROPIC_API_KEY ? " (AI scoring on)" : " (basic scoring: set ANTHROPIC_API_KEY for AI)"));
+if (require.main === module) server.listen(PORT, "0.0.0.0", () => {
+  console.log("Dialogue Duel running on http://0.0.0.0:" + PORT + (process.env.ANTHROPIC_API_KEY ? " (AI scoring on)" : " (basic scoring: set ANTHROPIC_API_KEY for AI)"));
   if (METHODS.includes("email") && !process.env.RESEND_API_KEY) console.log("WARNING: email sign-in is on but RESEND_API_KEY is not set. Codes only print here, so real users cannot sign in by email.");
   if (METHODS.includes("phone") && !(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && (process.env.TWILIO_FROM || process.env.TWILIO_MESSAGING_SERVICE_SID))) console.log("WARNING: phone sign-in is on but Twilio is not configured. Codes only print here, so real users cannot sign in by phone.");
 });

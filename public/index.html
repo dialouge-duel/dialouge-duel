@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#15131F">
+<title>Dialogue Duel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root {
+  --bg: #F2F3F7; --surface: #FFFFFF; --ink: #15131F; --muted: #5F6075; --line: #D9DBE5;
+  --accent: #C2185B; --accent-ink: #FFFFFF; --ok: #0E7C5A; --ok-bg: #DDF3EA; --bad: #B3261E; --gold: #9A6212; --gold-bg: #F6EAD3;
+  --font-display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #100F18; --surface: #1A1826; --ink: #ECEBF5; --muted: #A3A2B8; --line: #2D2B40; --accent: #FF5C97; --accent-ink: #1A0610; --ok: #5BD6A3; --ok-bg: #12372B; --bad: #FF8A80; --gold: #F0B85A; --gold-bg: #3A2D12; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--font-body); padding: env(safe-area-inset-top) 0 calc(76px + env(safe-area-inset-bottom)); }
+.wrap { max-width: 720px; margin: 0 auto; padding: 16px max(16px, env(safe-area-inset-left)) 24px max(16px, env(safe-area-inset-right)); display: flex; flex-direction: column; gap: 16px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 800; letter-spacing: .01em; margin: 0; text-wrap: balance; }
+h1 { font-size: 38px; line-height: 1; } h2 { font-size: 26px; line-height: 1.1; } h3 { font-size: 20px; line-height: 1.15; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.tag { margin: 4px 0 0; color: var(--muted); }
+.credits { text-align: right; flex: none; }
+.credits b { display: block; font: 500 28px/1 var(--font-mono); color: var(--gold); font-variant-numeric: tabular-nums; }
+.credits span { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.btn { font: 600 15px var(--font-body); border-radius: 8px; padding: 10px 16px; cursor: pointer; text-align: center; border: 1px solid var(--line); background: var(--surface); color: var(--ink); display: inline-block; text-decoration: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.small { padding: 6px 12px; font-size: 13px; }
+.btn[disabled], .btn.off { opacity: .5; pointer-events: none; }
+.btn.on { border-color: var(--accent); color: var(--accent); }
+input[type=text], textarea { font: inherit; font-size: 16px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; width: 100%; }
+.field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.field input { text-transform: none; letter-spacing: normal; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.row.between { justify-content: space-between; }
+.hint { font-size: 13px; color: var(--muted); margin: 0; }
+.err { color: var(--bad); font-size: 14px; margin: 0; }
+.check { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: block; text-decoration: none; }
+.card video { width: 100%; aspect-ratio: 9 / 12; object-fit: cover; background: #000; display: block; pointer-events: none; }
+.card .body { padding: 10px 12px; }
+.card .ttl { font: 800 20px/1.1 var(--font-display); }
+.sub { font: 12px var(--font-mono); color: var(--muted); }
+video.player { width: 100%; max-height: 64vh; background: #000; border-radius: 10px; display: block; }
+.clap { height: 22px; border-radius: 8px 8px 0 0; background: repeating-linear-gradient(-45deg, var(--ink) 0 14px, var(--surface) 14px 28px); border: 1px solid var(--line); border-bottom: 0; }
+.slate { display: flex; flex-direction: column; } .slate .panel { border-radius: 0 0 12px 12px; }
+.meta { font: 12px var(--font-mono); text-transform: uppercase; color: var(--muted); }
+.pct { font: 800 72px/.9 var(--font-display); font-variant-numeric: tabular-nums; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 12px var(--font-mono); padding: 4px 10px; border-radius: 999px; background: var(--ok-bg); color: var(--ok); }
+.chip.gold { background: var(--gold-bg); color: var(--gold); }
+.take { border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.take.first-in-list { border-top: 0; padding-top: 0; }
+.thead { display: flex; align-items: center; gap: 10px; }
+.rank { font: 14px var(--font-mono); color: var(--muted); width: 24px; flex: none; }
+.rank.gold { color: var(--gold); }
+.who { flex: 1; min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
+.pts { font: 20px var(--font-mono); font-variant-numeric: tabular-nums; }
+.react { display: flex; flex-wrap: wrap; gap: 6px; }
+.react button { font: 14px var(--font-body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+.react button.on { border-color: var(--accent); }
+.rate { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.rate button { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 13px var(--font-mono); cursor: pointer; }
+.rate button.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.cmts { display: flex; flex-direction: column; gap: 6px; font-size: 14px; overflow-wrap: anywhere; }
+.feature { background: var(--gold-bg); border-color: transparent; }
+.feature h3 { color: var(--gold); }
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.list li { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+.list li:first-child { border-top: 0; }
+.empty { text-align: center; padding: 24px 12px; color: var(--muted); }
+.empty h3 { color: var(--ink); margin-bottom: 4px; }
+.status { font-size: 14px; color: var(--muted); }
+.bar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; } .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+.banner { background: var(--gold-bg); color: var(--gold); border-radius: 10px; padding: 10px 14px; font-weight: 600; }
+/* recorder */
+.stage { position: relative; width: 100%; aspect-ratio: 9 / 14; max-height: 70vh; margin: 0 auto; background: #000; border-radius: 12px; overflow: hidden; }
+.stage video { position: absolute; inset: 0; width: 100%; height: 100%; }
+.stage .cam { object-fit: cover; transform: scaleX(-1); }
+.stage .ghost { object-fit: contain; pointer-events: none; }
+.stage .count { position: absolute; inset: 0; display: grid; place-items: center; font: 800 120px var(--font-display); color: #fff; text-shadow: 0 2px 20px rgba(0,0,0,.6); pointer-events: none; }
+.stage .recdot { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,.55); color: #fff; font: 13px var(--font-mono); padding: 4px 10px; border-radius: 999px; }
+.stage .recdot::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff3b30; margin-right: 6px; }
+.stage.split { aspect-ratio: auto; height: 70vh; display: grid; grid-template-rows: 1fr 1fr; }
+.stage.split video { position: static; }
+.stage.split .ghost { opacity: 1 !important; }
+.nav { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); display: flex; justify-content: center; padding-bottom: env(safe-area-inset-bottom); z-index: 5; }
+.nav .in { display: flex; width: 100%; max-width: 720px; }
+.nav a { flex: 1; text-align: center; padding: 12px 4px; font-weight: 600; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
+.nav a.on { color: var(--accent); }
+dialog { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); padding: 20px; width: min(92vw, 380px); }
+dialog::backdrop { background: rgba(0,0,0,.5); }
+dialog form { display: flex; flex-direction: column; gap: 12px; }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -2px; margin-right: 8px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } .bar i { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><h1>Dialogue Duel</h1><p class="tag">Recreate the scene. Beat the match.</p></div>
+    <div class="credits"><b id="credits">0</b><span>credits</span></div>
+  </header>
+  <main id="app" aria-live="polite"></main>
+</div>
+<nav class="nav" aria-label="Main"><div class="in">
+  <a href="#/" data-nav="home">Home</a>
+  <a href="#/clips" data-nav="clips">Clips</a>
+  <a href="#/new" data-nav="new">Add clip</a>
+  <a href="#/me" data-nav="me">Me</a>
+</div></nav>
+<dialog id="auth">
+  <form method="dialog" id="auth-form">
+    <h3 id="auth-title">Pick a creator name</h3>
+    <p class="hint" id="auth-hint">This is how you appear on takes, comments and the leaderboard.</p>
+    <div class="row" id="auth-methods" hidden><button class="btn small" type="button" data-m="email">Email</button><button class="btn small" type="button" data-m="phone">Phone</button></div>
+    <label class="field" id="f-email" hidden>Email <input type="email" id="auth-email" autocomplete="email" maxlength="254" placeholder="you@example.com"></label>
+    <label class="field" id="f-phone" hidden>Phone number <input type="tel" id="auth-phone" autocomplete="tel" maxlength="20" placeholder="+91 98765 43210"></label>
+    <label class="field" id="f-code" hidden>6-digit code <input type="text" id="auth-code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456"></label>
+    <label class="field" id="f-name">Creator name <input type="text" id="auth-name" maxlength="20" autocomplete="nickname" placeholder="e.g. AaravActs"></label>
+    <p class="err" id="auth-err" hidden></p>
+    <div class="row"><button class="btn primary" id="auth-go" type="submit">Continue</button><button class="btn" id="auth-cancel" type="button">Cancel</button></div>
+  </form>
+</dialog>
+<script src="app.js"></script>
+</body>
+</html>

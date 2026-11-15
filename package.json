@@ -1,0 +1,9 @@
+{
+  "name": "dialogue-duel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Recreate movie scenes on video, get scored, and compete.",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}

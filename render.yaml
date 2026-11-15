@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: dialogue-duel
+    runtime: docker
+    plan: starter
+    healthCheckPath: /healthz
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 10
+    envVars:
+      - key: TRUST_PROXY
+        value: "1"
+      - key: AUTH_METHODS
+        value: email          # use "email,phone" once Twilio is set up
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAIL_FROM
+        sync: false           # e.g. Dialogue Duel <login@yourdomain.com>
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM
+        sync: false           # or set TWILIO_MESSAGING_SERVICE_SID instead
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ADMIN_TOKEN
+        generateValue: true
